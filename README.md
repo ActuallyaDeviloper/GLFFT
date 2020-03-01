@@ -1,5 +1,7 @@
 Note: This is a fork of https://github.com/Themaister/GLFFT which compiles on Windows out of the box. For compilation on Linux check out the original repository.
 
+To build, clone with submodules (for example using 'git clone https://github.com/ActuallyaDeviloper/GLFFT.git --recursive') and simply open the Visual Studio project file. At least VS 2015 and later should be fine.
+
 # GLFFT
 
 GLFFT is a C++11/OpenGL library for doing the Fast Fourier Transform (FFT) on a GPU in one or two dimensions.
