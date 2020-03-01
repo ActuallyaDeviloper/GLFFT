@@ -22,7 +22,7 @@
 #include "glfft_interface.hpp"
 
 // Implement this header somewhere in your include path and include relevant GL/GLES API headers.
-#include "glfft_gl_api_headers.hpp"
+#include <glfft_gl_api_headers.hpp>
 
 #ifndef GLFFT_GLSL_LANG_STRING
 #error GLFFT_GLSL_LANG_STRING must be defined to e.g. "#version 310 es\n" or "#version 430 core\n".
@@ -37,7 +37,7 @@ void glfft_log(const char *fmt, ...);
 
 #ifndef GLFFT_TIME_OVERRIDE
 // Implement this.
-void glfft_time();
+double glfft_time();
 #else
 #define glfft_time GLFFT_TIME_OVERRIDE
 #endif

@@ -937,7 +937,12 @@ unique_ptr<Program> FFT::build_program(const Parameters &params)
     auto prog = context->compile_compute_shader(str.c_str());
     if (!prog)
     {
-        puts(str.c_str());
+        printf("Wrote \".ShaderText.txt\" file for debugging the issue.");
+        FILE* f = fopen(".ShaderText.txt", "w");
+        fputs(str.c_str(), f);
+        fclose(f);
+        //puts(str.c_str());
+        __debugbreak();
     }
 
 #if 0

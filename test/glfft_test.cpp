@@ -37,6 +37,9 @@ static default_random_engine engine;
 struct mufft_deleter { void operator()(void *ptr) const { mufft_free(ptr); } };
 using mufft_buffer = unique_ptr<void, mufft_deleter>;
 
+template<typename A, typename B> auto min(A a, B b) { return a < b ? a : b; }
+template<typename A, typename B> auto max(A a, B b) { return a > b ? a : b; }
+
 mufft_buffer alloc(size_t size)
 {
     void *ptr = mufft_alloc(size);

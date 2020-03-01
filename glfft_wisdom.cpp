@@ -20,6 +20,10 @@
 #include "glfft_interface.hpp"
 #include "glfft.hpp"
 #include <utility>
+#include <stdexcept>
+
+template<typename A, typename B> auto min(A a, B b) { return a < b ? a : b; }
+template<typename A, typename B> auto max(A a, B b) { return a > b ? a : b; }
 
 #ifdef GLFFT_SERIALIZATION
 #include "rapidjson/include/rapidjson/reader.h"

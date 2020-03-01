@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="glfft.cpp" />
+    <ClCompile Include="glfft_gl_interface.cpp" />
+    <ClCompile Include="glfft_wisdom.cpp" />
+    <ClCompile Include="test\glfft_cli.cpp">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\glfft_main.cpp">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\glfft_test.cpp">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\glfft_validate.cpp">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\glfw.cpp">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\cocoa_time.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\context.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\egl_context.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\glx_context.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\init.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\input.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\linux_joystick.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\monitor.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\null_init.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\null_joystick.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\null_monitor.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\null_window.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\osmesa_context.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\posix_thread.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\posix_time.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\vulkan.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\wgl_context.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\win32_init.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\win32_joystick.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\win32_monitor.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\win32_thread.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\win32_time.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\win32_window.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\window.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\wl_init.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\wl_monitor.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\wl_window.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\x11_init.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\x11_monitor.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\x11_window.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-glfw\src\xkb_unicode.c">
+      <Filter>test\lib-glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-muFFT\kernel.c">
+      <Filter>test\lib-muFFT</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-muFFT\fft.c">
+      <Filter>test\lib-muFFT</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-muFFT\cpu.c">
+      <Filter>test\lib-muFFT</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-muFFT\x86\kernel.avx.c">
+      <Filter>test\lib-muFFT\x86</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-muFFT\x86\kernel.sse3.c">
+      <Filter>test\lib-muFFT\x86</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-muFFT\x86\kernel.sse.c">
+      <Filter>test\lib-muFFT\x86</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lib-GLEW\GL\src\glew.c">
+      <Filter>test\lib-glew\GL\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="glfft.hpp" />
+    <ClInclude Include="glfft_common.hpp" />
+    <ClInclude Include="glfft_gl_interface.hpp" />
+    <ClInclude Include="glfft_interface.hpp" />
+    <ClInclude Include="glfft_wisdom.hpp" />
+    <ClInclude Include="test\glfft_cli.hpp">
+      <Filter>test</Filter>
+    </ClInclude>
+    <ClInclude Include="test\glfft_context.hpp">
+      <Filter>test</Filter>
+    </ClInclude>
+    <ClInclude Include="test\glfft_validate.hpp">
+      <Filter>test</Filter>
+    </ClInclude>
+    <ClInclude Include="test\glfft_gl_api_headers.hpp">
+      <Filter>test</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-glfw\src\cocoa_joystick.h">
+      <Filter>test\lib-glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-glfw\src\cocoa_platform.h">
+      <Filter>test\lib-glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-glfw\src\egl_context.h">
+      <Filter>test\lib-glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-glfw\src\glx_context.h">
+      <Filter>test\lib-glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-glfw\src\internal.h">
+      <Filter>test\lib-glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-glfw\src\linux_joystick.h">
+      <Filter>test\lib-glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-glfw\src\mappings.h">
+      <Filter>test\lib-glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-glfw\src\nsgl_context.h">
+      <Filter>test\lib-glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-glfw\src\null_joystick.h">
+      <Filter>test\lib-glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-glfw\src\null_platform.h">
+      <Filter>test\lib-glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-glfw\src\osmesa_context.h">
+      <Filter>test\lib-glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-glfw\src\posix_thread.h">
+      <Filter>test\lib-glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-glfw\src\posix_time.h">
+      <Filter>test\lib-glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-glfw\src\wgl_context.h">
+      <Filter>test\lib-glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-glfw\src\win32_joystick.h">
+      <Filter>test\lib-glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-glfw\src\win32_platform.h">
+      <Filter>test\lib-glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-glfw\src\wl_platform.h">
+      <Filter>test\lib-glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-glfw\src\x11_platform.h">
+      <Filter>test\lib-glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-glfw\src\xkb_unicode.h">
+      <Filter>test\lib-glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-muFFT\fft.h">
+      <Filter>test\lib-muFFT</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-muFFT\fft_internal.h">
+      <Filter>test\lib-muFFT</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-muFFT\x86\kernel.h">
+      <Filter>test\lib-muFFT\x86</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-GLEW\GL\eglew.h">
+      <Filter>test\lib-glew\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-GLEW\GL\glew.h">
+      <Filter>test\lib-glew\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-GLEW\GL\glxew.h">
+      <Filter>test\lib-glew\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="test\lib-GLEW\GL\wglew.h">
+      <Filter>test\lib-glew\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="glsl\fft_common.inc">
+      <Filter>glsl</Filter>
+    </ClInclude>
+    <ClInclude Include="glsl\fft_main.inc">
+      <Filter>glsl</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="glsl">
+      <UniqueIdentifier>{521b30a3-782d-4928-8cff-3ea144591322}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test">
+      <UniqueIdentifier>{1f6b6b88-d397-43df-8fd1-0a78de7a29bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test\lib-glew">
+      <UniqueIdentifier>{377cdaaa-4c10-4002-9d2e-a879792ba3cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test\lib-glfw">
+      <UniqueIdentifier>{06dc01ea-1444-4185-abcd-b3b42bbf440b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test\lib-muFFT">
+      <UniqueIdentifier>{134c1892-662b-4117-8581-495bcf8ca319}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test\lib-muFFT\x86">
+      <UniqueIdentifier>{30c71123-c46c-4af6-bbfe-69ee7450b407}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test\lib-glew\GL">
+      <UniqueIdentifier>{30ba271e-e72b-42e5-aec7-21459071c9d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test\lib-glew\GL\src">
+      <UniqueIdentifier>{bc7f7192-b2e2-47ac-b249-837985b891b9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="glsl\fft_radix4.inc">
+      <Filter>glsl</Filter>
+    </None>
+    <None Include="glsl\fft_radix8.inc">
+      <Filter>glsl</Filter>
+    </None>
+    <None Include="glsl\fft_radix16.inc">
+      <Filter>glsl</Filter>
+    </None>
+    <None Include="glsl\fft_radix64.inc">
+      <Filter>glsl</Filter>
+    </None>
+    <None Include="glsl\fft_shared.inc">
+      <Filter>glsl</Filter>
+    </None>
+    <None Include="test\lib-glfw\src\cocoa_init.m">
+      <Filter>test\lib-glfw</Filter>
+    </None>
+    <None Include="test\lib-glfw\src\cocoa_joystick.m">
+      <Filter>test\lib-glfw</Filter>
+    </None>
+    <None Include="test\lib-glfw\src\cocoa_monitor.m">
+      <Filter>test\lib-glfw</Filter>
+    </None>
+    <None Include="test\lib-glfw\src\cocoa_window.m">
+      <Filter>test\lib-glfw</Filter>
+    </None>
+    <None Include="test\lib-glfw\src\nsgl_context.m">
+      <Filter>test\lib-glfw</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="test\lib-glfw\src\CMakeLists.txt">
+      <Filter>test\lib-glfw</Filter>
+    </Text>
+  </ItemGroup>
+</Project>

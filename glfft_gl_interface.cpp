@@ -17,7 +17,6 @@
  */
 
 #include "glfft_gl_interface.hpp"
-#include "glfft_validate.hpp"
 #include <cstdarg>
 #include <cstring>
 #include <vector>

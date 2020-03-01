@@ -1,3 +1,5 @@
+Note: This is a fork of https://github.com/Themaister/GLFFT which compiles on Windows out of the box. For compilation on Linux check out the original repository.
+
 # GLFFT
 
 GLFFT is a C++11/OpenGL library for doing the Fast Fourier Transform (FFT) on a GPU in one or two dimensions.
