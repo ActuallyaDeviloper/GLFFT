@@ -112,16 +112,16 @@ struct FFTOptions
         /// Workgroup size used in layout(local_size_x).
         /// Only affects performance, however, large values may make implementations of smaller sized FFTs impossible.
         /// FFT constructor will throw in this case.
-        unsigned workgroup_size_x = 4;
+        unsigned workgroup_size_x = 8;
         /// Workgroup size used in layout(local_size_x).
         /// Only affects performance, however, large values may make implementations of smaller sized FFTs impossible.
         /// FFT constructor will throw in this case.
-        unsigned workgroup_size_y = 1;
+        unsigned workgroup_size_y = 8;
         /// Vector size. Very GPU dependent. "Scalar" GPUs prefer 2 here, vector GPUs prefer 4 (and maybe 8).
         unsigned vector_size = 2;
         /// Whether to use banked shared memory or not.
         /// Desktop GPUs prefer true here, false for mobile in general.
-        bool shared_banked = false;
+        bool shared_banked = true;
     } performance;
 
     struct Type
