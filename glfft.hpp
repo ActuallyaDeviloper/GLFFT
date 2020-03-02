@@ -55,6 +55,10 @@ class FFT
         /// @param options       FFT options such as performance related parameters and types.
         /// @param wisdom        GLFFT wisdom which can override performance related options
         ///                      (options.performance is used as a fallback).
+        /// @param input_load_texture_code
+        ///                      Custom code for sampling the input texture can be inserted here.
+        ///                      This must only use a single line and must define a function with signature 
+        ///                      "cfloat load_texture(uvec2 coord)" and can call "cfloat load_texture_inner(uvec2 coord)".
         /// @param reuse_preallocated_temporary_buffer0
         ///                      For large FFTs also a large internal temporary buffer is required. To reduce memory consumption
         ///                      you can provide a preallocated buffer here that can be shared with other parts of the program.
@@ -66,7 +70,9 @@ class FFT
         FFT(Context *context, unsigned Nx, unsigned Ny,
                 Type type, Direction direction, Target input_target, Target output_target,
                 std::shared_ptr<ProgramCache> cache, const FFTOptions &options,
-                const FFTWisdom &wisdom = FFTWisdom(), std::unique_ptr<Buffer> reuse_preallocated_temporary_buffer0 = nullptr, 
+                const FFTWisdom &wisdom = FFTWisdom(), 
+                std::string input_load_texture_code = input_load_texture_code_default,
+                std::unique_ptr<Buffer> reuse_preallocated_temporary_buffer0 = nullptr,
                 std::unique_ptr<Buffer> reuse_preallocated_temporary_buffer1 = nullptr);
 
         /// @brief Creates a single stage FFT. Used mostly internally for benchmarking partial FFTs.

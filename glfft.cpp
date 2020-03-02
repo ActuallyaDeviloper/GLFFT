@@ -523,7 +523,7 @@ static inline unsigned type_to_input_components(Type type)
 FFT::FFT(Context *context, unsigned Nx, unsigned Ny,
         Type type, Direction direction, Target input_target, Target output_target,
         std::shared_ptr<ProgramCache> program_cache, const FFTOptions &options, const FFTWisdom &wisdom,
-       std::unique_ptr<Buffer> reuse_preallocated_temporary_buffer0, std::unique_ptr<Buffer> reuse_preallocated_temporary_buffer1)
+        std::string input_load_texture_code, std::unique_ptr<Buffer> reuse_preallocated_temporary_buffer0, std::unique_ptr<Buffer> reuse_preallocated_temporary_buffer1)
     : context(context), cache(move(program_cache)), size_x(Nx), size_y(Ny)
 {
     set_texture_offset_scale(0.5f / Nx, 0.5f / Ny, 1.0f / Nx, 1.0f / Ny);
@@ -649,6 +649,7 @@ FFT::FFT(Context *context, unsigned Nx, unsigned Ny,
                 radix.shared_banked,
                 options.type.fp16, input_fp16, options.type.output_fp16,
                 options.type.normalize,
+                input_load_texture_code
             };
 
             const Pass pass = {
@@ -736,7 +737,7 @@ void FFT::store_shader_string(const char *path, const string &source)
 unique_ptr<Program> FFT::build_program(const Parameters &params)
 {
     string str;
-    str.reserve(16 * 1024);
+    str.reserve(64 * 1024);
 
 #if 0
     context->log("Building program:\n");
@@ -798,6 +799,10 @@ unique_ptr<Program> FFT::build_program(const Parameters &params)
     {
         str += "#define FFT_CONVOLVE\n";
     }
+
+    str += "#define FFT_LOAD_TEXTURE_CODE ";
+    str += params.input_load_texture_code.empty() ? input_load_texture_code_default : params.input_load_texture_code;
+    str += "\n";
 
     str += params.shared_banked ? "#define FFT_SHARED_BANKED 1\n" : "#define FFT_SHARED_BANKED 0\n";
 
