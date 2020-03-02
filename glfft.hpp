@@ -55,10 +55,19 @@ class FFT
         /// @param options       FFT options such as performance related parameters and types.
         /// @param wisdom        GLFFT wisdom which can override performance related options
         ///                      (options.performance is used as a fallback).
+        /// @param reuse_preallocated_temporary_buffer0
+        ///                      For large FFTs also a large internal temporary buffer is required. To reduce memory consumption
+        ///                      you can provide a preallocated buffer here that can be shared with other parts of the program.
+        ///                      The buffer must have size at least Nx * Ny * (type == ComplexToComplexDual ? 4 : 2) * (options.type.fp16 ? 2 : 4).
+        ///                      The provided buffer must not be used while the FFT is in progress and will contain unpredictable garbage data afterwards.
+        /// @param reuse_preallocated_temporary_buffer1
+        ///                      Same as reuse_preallocated_temporary_buffer0 and used only if the output is a texture.
+        ///                      May be aliased with the input if the input if the input is not needed again after processing.
         FFT(Context *context, unsigned Nx, unsigned Ny,
                 Type type, Direction direction, Target input_target, Target output_target,
                 std::shared_ptr<ProgramCache> cache, const FFTOptions &options,
-                const FFTWisdom &wisdom = FFTWisdom());
+                const FFTWisdom &wisdom = FFTWisdom(), std::unique_ptr<Buffer> reuse_preallocated_temporary_buffer0 = nullptr, 
+                std::unique_ptr<Buffer> reuse_preallocated_temporary_buffer1 = nullptr);
 
         /// @brief Creates a single stage FFT. Used mostly internally for benchmarking partial FFTs.
         ///

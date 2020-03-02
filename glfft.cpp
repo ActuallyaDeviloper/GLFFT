@@ -522,7 +522,8 @@ static inline unsigned type_to_input_components(Type type)
 
 FFT::FFT(Context *context, unsigned Nx, unsigned Ny,
         Type type, Direction direction, Target input_target, Target output_target,
-        std::shared_ptr<ProgramCache> program_cache, const FFTOptions &options, const FFTWisdom &wisdom)
+        std::shared_ptr<ProgramCache> program_cache, const FFTOptions &options, const FFTWisdom &wisdom,
+       std::unique_ptr<Buffer> reuse_preallocated_temporary_buffer0, std::unique_ptr<Buffer> reuse_preallocated_temporary_buffer1)
     : context(context), cache(move(program_cache)), size_x(Nx), size_y(Ny)
 {
     set_texture_offset_scale(0.5f / Nx, 0.5f / Ny, 1.0f / Nx, 1.0f / Ny);
@@ -530,10 +531,14 @@ FFT::FFT(Context *context, unsigned Nx, unsigned Ny,
     size_t temp_buffer_size = Nx * Ny * sizeof(float) * (type == ComplexToComplexDual ? 4 : 2);
     temp_buffer_size >>= options.type.output_fp16;
 
-    temp_buffer = context->create_buffer(nullptr, temp_buffer_size, AccessStreamCopy);
+    temp_buffer = reuse_preallocated_temporary_buffer0 ? 
+        std::move(reuse_preallocated_temporary_buffer0) :
+        context->create_buffer(nullptr, temp_buffer_size, AccessStreamCopy);
     if (output_target != SSBO)
     {
-        temp_buffer_image = context->create_buffer(nullptr, temp_buffer_size, AccessStreamCopy);
+        temp_buffer_image = reuse_preallocated_temporary_buffer1 ?
+            std::move(reuse_preallocated_temporary_buffer1) :
+            context->create_buffer(nullptr, temp_buffer_size, AccessStreamCopy);
     }
 
     bool expand = false;
@@ -1001,9 +1006,7 @@ void FFT::process(CommandBuffer *cmd, Resource *output, Resource *input, Resourc
 
     Resource *buffers[2] = {
         input,
-        passes.size() & 1 ?
-            (passes.back().parameters.output_target != SSBO ? temp_buffer_image.get() : output) :
-            temp_buffer.get(),
+        (passes.back().parameters.output_target == SSBO && passes.size() & 1) ? output : temp_buffer.get()
     };
 
     if (input_aux != 0)
@@ -1144,9 +1147,14 @@ void FFT::process(CommandBuffer *cmd, Resource *output, Resource *input, Resourc
 
         if (pass_index == 0)
         {
-            buffers[0] = passes.size() & 1 ?
-                temp_buffer.get() :
-                (passes.back().parameters.output_target != SSBO ? temp_buffer_image.get() : output);
+            if (passes.back().parameters.output_target == SSBO)
+            {
+                buffers[0] = passes.size() & 1 ? temp_buffer.get() : output;
+            }
+            else
+            {
+                buffers[0] = temp_buffer_image.get();
+            }
         }
 
         swap(buffers[0], buffers[1]);
