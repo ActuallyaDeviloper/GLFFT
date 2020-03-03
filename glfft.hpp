@@ -130,12 +130,12 @@ class FFT
         double get_cost() const { return cost; }
 
         /// @brief Returns number of passes (glDispatchCompute) in a process() call.
-        unsigned get_num_passes() const { return passes.size(); }
+        size_t get_num_passes() const { return passes.size(); }
 
         /// @brief Returns Nx.
-        unsigned get_dimension_x() const { return size_x; }
+        size_t get_dimension_x() const { return size_x; }
         /// @brief Returns Ny.
-        unsigned get_dimension_y() const { return size_y; }
+        size_t get_dimension_y() const { return size_y; }
 
         /// @brief Sets offset and scale parameters for normalized texel coordinates when sampling textures.
         ///
