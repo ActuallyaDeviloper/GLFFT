@@ -132,7 +132,7 @@ struct FFTOptions
 
     struct Type
     {
-        /// Whether internal shader should be mediump float.
+        /// Whether internal shader and intermediate results should be mediump float.
         bool fp16 = false;
         /// Whether input SSBO is a packed 2xfp16 format. Otherwise, regular FP32.
         bool input_fp16 = false;

@@ -529,12 +529,12 @@ FFT::FFT(Context *context, unsigned Nx, unsigned Ny,
     set_texture_offset_scale(0.5f / Nx, 0.5f / Ny, 1.0f / Nx, 1.0f / Ny);
 
     size_t temp_buffer_size = Nx * Ny * sizeof(float) * (type == ComplexToComplexDual ? 4 : 2);
-    temp_buffer_size >>= options.type.output_fp16;
+    temp_buffer_size >>= options.type.fp16;
 
     temp_buffer = reuse_preallocated_temporary_buffer0 ? 
         std::move(reuse_preallocated_temporary_buffer0) :
         context->create_buffer(nullptr, temp_buffer_size, AccessStreamCopy);
-    if (output_target != SSBO)
+    if (output_target != SSBO || (options.type.output_fp16 && !options.type.fp16)) // @HigherIntermediatePrecision We may need higher intermediate precision.
     {
         temp_buffer_image = reuse_preallocated_temporary_buffer1 ?
             std::move(reuse_preallocated_temporary_buffer1) :
@@ -629,7 +629,8 @@ FFT::FFT(Context *context, unsigned Nx, unsigned Ny,
             // If this is the last pass and we're writing to an image, use a special shader variant.
             bool last_pass = index == last_index && i == radix_direction.size() - 1;
 
-            bool input_fp16 = passes.empty() ? options.type.input_fp16 : options.type.output_fp16;
+            bool input_fp16 = passes.empty() ? options.type.input_fp16 : options.type.fp16;
+            bool output_fp16 = last_pass ? options.type.output_fp16 : options.type.fp16;
             Target out_target = last_pass ? output_target : SSBO;
             Target in_target = passes.empty() ? input_target : SSBO;
             Direction dir = direction == InverseConvolve && !passes.empty() ? Inverse : direction;
@@ -647,7 +648,7 @@ FFT::FFT(Context *context, unsigned Nx, unsigned Ny,
                 out_target,
                 p == 1,
                 radix.shared_banked,
-                options.type.fp16, input_fp16, options.type.output_fp16,
+                options.type.fp16, input_fp16, output_fp16,
                 options.type.normalize,
                 input_load_texture_code
             };
@@ -670,7 +671,6 @@ FFT::FFT(Context *context, unsigned Nx, unsigned Ny,
         // This way, we avoid having special purpose transforms for all FFT variants.
         if (index == 0 && (type == ComplexToReal || type == RealToComplex))
         {
-            bool input_fp16 = passes.empty() ? options.type.input_fp16 : options.type.output_fp16;
             bool last_pass = radices[1].empty();
             Direction dir = direction == InverseConvolve && !passes.empty() ? Inverse : direction;
             Target in_target = passes.empty() ? input_target : SSBO;
@@ -679,7 +679,8 @@ FFT::FFT(Context *context, unsigned Nx, unsigned Ny,
             unsigned uv_scale_x = 1;
 
             auto base_opts = options;
-            base_opts.type.input_fp16 = input_fp16;
+            base_opts.type.input_fp16 = passes.empty() ? options.type.input_fp16 : options.type.fp16;
+            base_opts.type.output_fp16 = last_pass ? options.type.output_fp16 : options.type.fp16;
 
             auto &opts = wisdom.find_optimal_options_or_default(Nx, Ny, 2, mode, in_target, out_target, base_opts);
             auto res = build_resolve_radix(Nx, Ny, { opts.workgroup_size_x, opts.workgroup_size_y, 1 });
@@ -1011,7 +1012,7 @@ void FFT::process(CommandBuffer *cmd, Resource *output, Resource *input, Resourc
 
     Resource *buffers[2] = {
         input,
-        (passes.back().parameters.output_target == SSBO && passes.size() & 1) ? output : temp_buffer.get()
+        (!temp_buffer_image && passes.size() & 1) ? output : temp_buffer.get() // If no 'temp_buffer_image' is available, we must be use the output buffer directly. 
     };
 
     if (input_aux != 0)
@@ -1065,6 +1066,11 @@ void FFT::process(CommandBuffer *cmd, Resource *output, Resource *input, Resourc
         constant_data.p = p;
         constant_data.stride = pass.stride;
         p *= pass.parameters.radix;
+
+        if (pass_index + 1 >= passes.size()) // In the last pass we need to inject our output buffer.
+        {
+            buffers[1] = output; 
+        }
 
         if (pass.parameters.input_target != SSBO)
         {
@@ -1125,7 +1131,7 @@ void FFT::process(CommandBuffer *cmd, Resource *output, Resource *input, Resourc
                         break;
                 }
             }
-            cmd->bind_storage_texture(BindingImage, static_cast<Texture*>(output), format);
+            cmd->bind_storage_texture(BindingImage, static_cast<Texture*>(buffers[1]), format);
         }
         else
         {
@@ -1152,7 +1158,7 @@ void FFT::process(CommandBuffer *cmd, Resource *output, Resource *input, Resourc
 
         if (pass_index == 0)
         {
-            if (passes.back().parameters.output_target == SSBO)
+            if (!temp_buffer_image) // If no 'temp_buffer_image' is available, we must be use the output buffer directly. 
             {
                 buffers[0] = passes.size() & 1 ? temp_buffer.get() : output;
             }
