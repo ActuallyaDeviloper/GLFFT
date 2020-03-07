@@ -49,7 +49,7 @@ mufft_buffer alloc(size_t size)
 
 using cfloat = complex<float>;
 
-mufft_buffer create_input(unsigned N)
+mufft_buffer create_input(size_t N)
 {
     auto buffer = alloc(N * sizeof(float));
     float *ptr = static_cast<float*>(buffer.get());
@@ -231,7 +231,7 @@ static mufft_buffer create_reference(Type type, Direction direction,
     out = static_cast<cfloat*>(output.get());
     for (unsigned i = 0; i < output_size / sizeof(cfloat); i++)
     {
-        out[i] /= Nx * Ny;
+        out[i] /= static_cast<float>(Nx * Ny);
     }
 
     return output;
@@ -463,7 +463,7 @@ static inline pair<float, float> fp16_to_fp32(uint32_t v)
     return make_pair(fp16_to_fp32(lower), fp16_to_fp32(upper));
 }
 
-static mufft_buffer convert_fp32_fp16(const float *input, unsigned N)
+static mufft_buffer convert_fp32_fp16(const float *input, size_t N)
 {
     auto buffer = alloc(N * sizeof(uint16_t));
     auto ptr = static_cast<uint32_t*>(buffer.get());
@@ -476,7 +476,7 @@ static mufft_buffer convert_fp32_fp16(const float *input, unsigned N)
     return buffer;
 }
 
-static mufft_buffer convert_fp16_fp32(const uint32_t *input, unsigned N)
+static mufft_buffer convert_fp16_fp32(const uint32_t *input, size_t N)
 {
     auto buffer = alloc(N * sizeof(float));
     auto ptr = static_cast<float*>(buffer.get());
@@ -533,8 +533,8 @@ static void run_test_ssbo(Context *context,
         output_data = convert_fp16_fp32(static_cast<const uint32_t*>(output_data.get()), output_size / sizeof(float));
     }
 
-    float epsilon = options.type.output_fp16 || options.type.input_fp16 ? args.epsilon_fp16 : args.epsilon_fp32;
-    float min_snr = options.type.output_fp16 || options.type.input_fp16 ? args.min_snr_fp16 : args.min_snr_fp32;
+    float epsilon = static_cast<float>(options.type.output_fp16 || options.type.input_fp16 ? args.epsilon_fp16 : args.epsilon_fp32);
+    float min_snr = static_cast<float>(options.type.output_fp16 || options.type.input_fp16 ? args.min_snr_fp16 : args.min_snr_fp32);
     if (direction == InverseConvolve)
     {
         epsilon *= 1.5f;
@@ -600,8 +600,8 @@ static void run_test_texture(Context *context,
         output_data = convert_fp16_fp32(static_cast<const uint32_t*>(output_data.get()), output_size / sizeof(float));
     }
 
-    float epsilon = options.type.output_fp16 || options.type.input_fp16 ? args.epsilon_fp16 : args.epsilon_fp32;
-    float min_snr = options.type.output_fp16 || options.type.input_fp16 ? args.min_snr_fp16 : args.min_snr_fp32;
+    float epsilon = static_cast<float>(options.type.output_fp16 || options.type.input_fp16 ? args.epsilon_fp16 : args.epsilon_fp32);
+    float min_snr = static_cast<float>(options.type.output_fp16 || options.type.input_fp16 ? args.min_snr_fp16 : args.min_snr_fp32);
     if (direction == InverseConvolve)
     {
         epsilon *= 1.5f;
@@ -694,8 +694,8 @@ static void run_test_image(Context *context, const TestSuiteArguments &args, uns
 
     auto output_data = readback_texture(context, tex.get(), components, Nx, Ny);
 
-    float epsilon = components > 1 || options.type.output_fp16 || options.type.input_fp16 ? args.epsilon_fp16 : args.epsilon_fp32;
-    float min_snr = components > 1 || options.type.output_fp16 || options.type.input_fp16 ? args.min_snr_fp16 : args.min_snr_fp32;
+    float epsilon = static_cast<float>(options.type.output_fp16 || options.type.input_fp16 ? args.epsilon_fp16 : args.epsilon_fp32);
+    float min_snr = static_cast<float>(options.type.output_fp16 || options.type.input_fp16 ? args.min_snr_fp16 : args.min_snr_fp32);
     if (direction == InverseConvolve)
     {
         epsilon *= 1.5f;
