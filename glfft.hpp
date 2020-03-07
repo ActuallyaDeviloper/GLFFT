@@ -55,10 +55,25 @@ class FFT
         /// @param options       FFT options such as performance related parameters and types.
         /// @param wisdom        GLFFT wisdom which can override performance related options
         ///                      (options.performance is used as a fallback).
+        /// @param input_load_texture_code
+        ///                      Custom code for sampling the input texture can be inserted here.
+        ///                      This must only use a single line and must define a function with signature 
+        ///                      "cfloat load_texture(uvec2 coord)" and can call "cfloat load_texture_inner(uvec2 coord)".
+        /// @param reuse_preallocated_temporary_buffer0
+        ///                      For large FFTs also a large internal temporary buffer is required. To reduce memory consumption
+        ///                      you can provide a preallocated buffer here that can be shared with other parts of the program.
+        ///                      The buffer must have size at least Nx * Ny * (type == ComplexToComplexDual ? 4 : 2) * (options.type.fp16 ? 2 : 4).
+        ///                      The provided buffer must not be used while the FFT is in progress and will contain unpredictable garbage data afterwards.
+        /// @param reuse_preallocated_temporary_buffer1
+        ///                      Same as reuse_preallocated_temporary_buffer0 and used only if the output is a texture.
+        ///                      May be aliased with the input if the input if the input is not needed again after processing.
         FFT(Context *context, unsigned Nx, unsigned Ny,
                 Type type, Direction direction, Target input_target, Target output_target,
                 std::shared_ptr<ProgramCache> cache, const FFTOptions &options,
-                const FFTWisdom &wisdom = FFTWisdom());
+                const FFTWisdom &wisdom = FFTWisdom(), 
+                std::string input_load_texture_code = input_load_texture_code_default,
+                std::unique_ptr<Buffer> reuse_preallocated_temporary_buffer0 = nullptr,
+                std::unique_ptr<Buffer> reuse_preallocated_temporary_buffer1 = nullptr);
 
         /// @brief Creates a single stage FFT. Used mostly internally for benchmarking partial FFTs.
         ///
@@ -115,12 +130,12 @@ class FFT
         double get_cost() const { return cost; }
 
         /// @brief Returns number of passes (glDispatchCompute) in a process() call.
-        unsigned get_num_passes() const { return passes.size(); }
+        size_t get_num_passes() const { return passes.size(); }
 
         /// @brief Returns Nx.
-        unsigned get_dimension_x() const { return size_x; }
+        size_t get_dimension_x() const { return size_x; }
         /// @brief Returns Ny.
-        unsigned get_dimension_y() const { return size_y; }
+        size_t get_dimension_y() const { return size_y; }
 
         /// @brief Sets offset and scale parameters for normalized texel coordinates when sampling textures.
         ///

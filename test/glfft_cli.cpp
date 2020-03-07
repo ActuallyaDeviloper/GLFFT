@@ -143,7 +143,7 @@ struct BenchArguments
     unsigned warmup = 2;
     unsigned iterations = 20;
     unsigned dispatches = 50;
-    unsigned timeout = 1.0;
+    unsigned timeout = 1;
     Type type = ComplexToComplex;
     unsigned size_for_type = 2;
     const char *string_for_type = "C2C";
@@ -335,6 +335,7 @@ static int cli_test(Context *context, int argc, char *argv[])
     cbs.add("--minimum-snr-fp32", [&args](CLIParser &parser) { args.min_snr_fp32 = parser.next_double(); });
     cbs.add("--epsilon-fp16",     [&args](CLIParser &parser) { args.epsilon_fp16 = parser.next_double(); });
     cbs.add("--epsilon-fp32",     [&args](CLIParser &parser) { args.epsilon_fp32 = parser.next_double(); });
+    cbs.add("--single-base-size",      [&args](CLIParser &parser) { args.single_base_size = true; });
 
     cbs.error_handler = [context]{ cli_test_help(context); };
     CLIParser parser(move(cbs), argc, argv);
@@ -406,7 +407,7 @@ static int cli_bench(Context *context, int argc, char *argv[])
     cbs.add("--warmup",         [&args](CLIParser &parser) { args.warmup = parser.next_uint(); });
     cbs.add("--iterations",     [&args](CLIParser &parser) { args.iterations = parser.next_uint(); });
     cbs.add("--dispatches",     [&args](CLIParser &parser) { args.dispatches = parser.next_uint(); });
-    cbs.add("--timeout",        [&args](CLIParser &parser) { args.timeout = parser.next_double(); });
+    cbs.add("--timeout",        [&args](CLIParser &parser) { args.timeout = (unsigned int)parser.next_double(); });
     cbs.add("--fp16",           [&args](CLIParser&)        { args.fp16 = true; });
     cbs.add("--type",           [&args](CLIParser &parser) { args.type = parse_type(parser.next_string(), args); });
     cbs.add("--input-texture",  [&args](CLIParser&)        { args.input_texture = true; });

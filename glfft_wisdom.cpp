@@ -398,7 +398,7 @@ std::pair<double, FFTOptions::Performance> FFTWisdom::study(Context *context, co
                     }
 
                     FFTOptions::Performance perf;
-                    perf.shared_banked = shared_banked;
+                    perf.shared_banked = !!shared_banked;
                     perf.vector_size = vector_size;
                     perf.workgroup_size_x = workgroup_size_x;
                     perf.workgroup_size_y = workgroup_size_y;

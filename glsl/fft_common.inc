@@ -318,7 +318,7 @@ cfloat load_texture(sampler2D sampler, uvec2 coord)
 #endif
 }
 
-cfloat load_texture(uvec2 coord)
+cfloat load_texture_inner(uvec2 coord)
 {
 #ifdef FFT_CONVOLVE
     // Convolution in frequency domain is multiplication.
@@ -329,6 +329,9 @@ cfloat load_texture(uvec2 coord)
     return load_texture(uTexture, coord);
 #endif
 }
+
+// This must define a function with signature cfloat load_texture(uvec2 coord)
+FFT_LOAD_TEXTURE_CODE
 
 // Implement a dummy load_global, or we have to #ifdef out lots of dead code elsewhere.
 #ifdef FFT_VEC8

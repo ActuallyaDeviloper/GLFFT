@@ -33,7 +33,7 @@
 namespace GLFFT
 {
 
-enum Direction
+enum Direction : char
 {
     /// Forward FFT transform.
     Forward = -1,
@@ -44,7 +44,7 @@ enum Direction
     Inverse = 1
 };
 
-enum Mode
+enum Mode : char
 {
     Horizontal,
     HorizontalDual,
@@ -55,7 +55,7 @@ enum Mode
     ResolveComplexToReal,
 };
 
-enum Type
+enum Type : char
 {
     /// Regular complex-to-complex transform.
     ComplexToComplex,
@@ -68,7 +68,7 @@ enum Type
     RealToComplex
 };
 
-enum Target
+enum Target : char
 {
     /// GL_SHADER_STORAGE_BUFFER
     SSBO,
@@ -80,6 +80,11 @@ enum Target
     /// ComplexToReal -> GL_R32F (because GLES 3.1 doesn't have GL_R16F image type).
     ImageReal
 };
+
+static constexpr char const input_load_texture_code_default[] = 
+    "cfloat load_texture(uvec2 coord) {"
+    "    return load_texture_inner(coord);"
+    "}";
 
 struct Parameters
 {
@@ -96,10 +101,11 @@ struct Parameters
     bool shared_banked;
     bool fft_fp16, input_fp16, output_fp16;
     bool fft_normalize;
-
+    std::string input_load_texture_code; // If empty defaults to input_load_texture_code_default. Unfortunately we can't put it here because that breaks the initializer lists in C++11.
     bool operator==(const Parameters &other) const
     {
-        return std::memcmp(this, &other, sizeof(Parameters)) == 0;
+        return std::memcmp(this, &other, offsetof(Parameters, input_load_texture_code)) == 0
+            && input_load_texture_code == other.input_load_texture_code;
     }
 };
 
@@ -126,7 +132,7 @@ struct FFTOptions
 
     struct Type
     {
-        /// Whether internal shader should be mediump float.
+        /// Whether internal shader and intermediate results should be mediump float.
         bool fp16 = false;
         /// Whether input SSBO is a packed 2xfp16 format. Otherwise, regular FP32.
         bool input_fp16 = false;
