@@ -494,11 +494,13 @@ static mufft_buffer convert_fp16_fp32(const uint32_t *input, unsigned N)
 static void run_test_ssbo(Context *context,
         const TestSuiteArguments &args, unsigned Nx, unsigned Ny, Type type, Direction direction, const FFTOptions &options, const shared_ptr<ProgramCache> &cache)
 {
-    context->log("Running SSBO -> SSBO FFT, %04u x %04u\n\t%7s transform\n\t%8s\n\tbanked shared %s\n\tvector size %u\n\twork group (%u, %u)\n\tinput fp16 %s\n\toutput fp16 %s ...\n",
-            Nx, Ny, direction_to_str(direction), type_to_str(type),
-            options.performance.shared_banked ? "yes" : "no", options.performance.vector_size, options.performance.workgroup_size_x, options.performance.workgroup_size_y,
-            options.type.input_fp16 ? "yes" : "no",
-            options.type.output_fp16 ? "yes" : "no");
+    context->log("Running SSBO -> SSBO FFT, %04u x %04u\n\t%7s transform\n\t%8s\n\tbanked shared %s\n\tvector size %u\n\twork group (%u, %u)\n\tinput fp16 %s\n\toutput fp16 %s\n\tfp16 %s ...\n",
+        Nx, Ny, direction_to_str(direction), type_to_str(type),
+        options.performance.shared_banked ? "yes" : "no", options.performance.vector_size, options.performance.workgroup_size_x, options.performance.workgroup_size_y,
+        options.type.input_fp16 ? "yes" : "no",
+        options.type.output_fp16 ? "yes" : "no",
+        options.type.fp16 ? "yes" : "no");
+
 
     unique_ptr<Buffer> test_input;
     unique_ptr<Buffer> test_output;
@@ -545,11 +547,12 @@ static void run_test_ssbo(Context *context,
 static void run_test_texture(Context *context,
         const TestSuiteArguments &args, unsigned Nx, unsigned Ny, Type type, Direction direction, const FFTOptions &options, const shared_ptr<ProgramCache> &cache)
 {
-    context->log("Running Texture -> SSBO FFT, %04u x %04u\n\t%7s transform\n\t%8s\n\tbanked shared %s\n\tvector size %u\n\twork group (%u, %u)\n\tinput fp16 %s\n\toutput fp16 %s ...\n",
-            Nx, Ny, direction_to_str(direction), type_to_str(type),
-            options.performance.shared_banked ? "yes" : "no", options.performance.vector_size, options.performance.workgroup_size_x, options.performance.workgroup_size_y,
-            options.type.input_fp16 ? "yes" : "no",
-            options.type.output_fp16 ? "yes" : "no");
+    context->log("Running Texture -> SSBO FFT, %04u x %04u\n\t%7s transform\n\t%8s\n\tbanked shared %s\n\tvector size %u\n\twork group (%u, %u)\n\tinput fp16 %s\n\toutput fp16 %s\n\tfp16 %s ...\n",
+        Nx, Ny, direction_to_str(direction), type_to_str(type),
+        options.performance.shared_banked ? "yes" : "no", options.performance.vector_size, options.performance.workgroup_size_x, options.performance.workgroup_size_y,
+        options.type.input_fp16 ? "yes" : "no",
+        options.type.output_fp16 ? "yes" : "no",
+        options.type.fp16 ? "yes" : "no");
 
     unique_ptr<Texture> test_input;
     unique_ptr<Buffer> test_output;
@@ -634,11 +637,12 @@ static mufft_buffer readback_texture(Context *context, Texture *tex, unsigned co
 
 static void run_test_image(Context *context, const TestSuiteArguments &args, unsigned Nx, unsigned Ny, Type type, Direction direction, const FFTOptions &options, const shared_ptr<ProgramCache> &cache)
 {
-    context->log("Running SSBO -> Image FFT, %04u x %04u\n\t%7s transform\n\t%8s\n\tbanked shared %s\n\tvector size %u\n\twork group (%u, %u)\n\tinput fp16 %s\n\toutput fp16 %s ...\n",
-            Nx, Ny, direction_to_str(direction), type_to_str(type),
-            options.performance.shared_banked ? "yes" : "no", options.performance.vector_size, options.performance.workgroup_size_x, options.performance.workgroup_size_y,
-            options.type.input_fp16 ? "yes" : "no",
-            options.type.output_fp16 ? "yes" : "no");
+    context->log("Running SSBO -> Image FFT, %04u x %04u\n\t%7s transform\n\t%8s\n\tbanked shared %s\n\tvector size %u\n\twork group (%u, %u)\n\tinput fp16 %s\n\toutput fp16 %s\n\tfp16 %s ...\n",
+        Nx, Ny, direction_to_str(direction), type_to_str(type),
+        options.performance.shared_banked ? "yes" : "no", options.performance.vector_size, options.performance.workgroup_size_x, options.performance.workgroup_size_y,
+        options.type.input_fp16 ? "yes" : "no",
+        options.type.output_fp16 ? "yes" : "no", 
+        options.type.fp16 ? "yes" : "no");
 
     unique_ptr<Buffer> test_input;
 
@@ -807,6 +811,11 @@ void GLFFT::Internal::run_test_suite(Context *context, const TestSuiteArguments 
 
         for (unsigned N = N_mult * (big_workgroup ? 128 : 32); N <= 1024; N <<= 1)
         {
+            if (args.single_base_size && N != 256) // Option to make length of test run somewhat reasonable.
+            {
+                continue;
+            }
+
             // Texture -> SSBO
             enqueue_test(context, tests, args, N, N / 2, ComplexToComplex, Forward, Image, SSBO, options, cache);
             enqueue_test(context, tests, args, N, N / 2, ComplexToComplex, Inverse, Image, SSBO, options, cache);

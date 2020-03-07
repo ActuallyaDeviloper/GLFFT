@@ -40,6 +40,7 @@ namespace GLFFT
             unsigned test_id_min = 0;
             unsigned test_id_max = 0;
             bool exhaustive = true;
+            bool single_base_size = true;
             bool throw_on_fail = false;
             double min_snr_fp16 = 50.0;
             double min_snr_fp32 = 100.0;

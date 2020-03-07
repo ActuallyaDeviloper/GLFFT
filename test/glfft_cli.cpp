@@ -335,6 +335,7 @@ static int cli_test(Context *context, int argc, char *argv[])
     cbs.add("--minimum-snr-fp32", [&args](CLIParser &parser) { args.min_snr_fp32 = parser.next_double(); });
     cbs.add("--epsilon-fp16",     [&args](CLIParser &parser) { args.epsilon_fp16 = parser.next_double(); });
     cbs.add("--epsilon-fp32",     [&args](CLIParser &parser) { args.epsilon_fp32 = parser.next_double(); });
+    cbs.add("--single-base-size",      [&args](CLIParser &parser) { args.single_base_size = true; });
 
     cbs.error_handler = [context]{ cli_test_help(context); };
     CLIParser parser(move(cbs), argc, argv);
