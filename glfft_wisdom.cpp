@@ -463,7 +463,7 @@ const pair<const WisdomPass, FFTOptions::Performance>* FFTWisdom::find_optimal_o
     return itr != end(library) ? (&(*itr)) : nullptr;
 }
 
-const FFTOptions::Performance& FFTWisdom::find_optimal_options_or_default(unsigned Nx, unsigned Ny, unsigned radix,
+FFTOptions::Performance FFTWisdom::find_optimal_options_or_default(unsigned Nx, unsigned Ny, unsigned radix,
         Mode mode, Target input_target, Target output_target, const FFTOptions &base_options) const
 {
     WisdomPass pass = {

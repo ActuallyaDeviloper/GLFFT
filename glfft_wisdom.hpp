@@ -101,7 +101,7 @@ class FFTWisdom
         const std::pair<const WisdomPass, FFTOptions::Performance>* find_optimal_options(unsigned Nx, unsigned Ny, unsigned radix,
                 Mode mode, Target input_target, Target output_target, const FFTOptions::Type &base_options) const;
 
-        const FFTOptions::Performance& find_optimal_options_or_default(unsigned Nx, unsigned Ny, unsigned radix,
+        FFTOptions::Performance find_optimal_options_or_default(unsigned Nx, unsigned Ny, unsigned radix,
                 Mode mode, Target input_target, Target output_target, const FFTOptions &base_options) const;
 
         void set_static_wisdom(FFTStaticWisdom static_wisdom) { this->static_wisdom = static_wisdom; }

@@ -260,7 +260,7 @@ static vector<Radix> split_radices(unsigned Nx, unsigned Ny, Mode mode, Target i
 
     auto is_valid = [&](unsigned radix) -> bool {
         unsigned workgroup_size_z = radix_to_wg_z(radix);
-        auto &opt = wisdom.find_optimal_options_or_default(Nx, Ny, radix, mode, SSBO, SSBO, options);
+        auto opt = wisdom.find_optimal_options_or_default(Nx, Ny, radix, mode, SSBO, SSBO, options);
 
         // We don't want pow2_stride to round up a very inefficient work group and make the is_valid test pass.
         return is_radix_valid(Nx, Ny,
@@ -328,8 +328,8 @@ static vector<Radix> split_radices(unsigned Nx, unsigned Ny, Mode mode, Target i
         // Use known performance options as a fallback.
         // We used SSBO -> SSBO cost functions to find the optimal radix splits,
         // but replace first and last options with Image -> SSBO / SSBO -> Image cost functions if appropriate.
-        auto &orig_opt = wisdom.find_optimal_options_or_default(Nx, Ny, radix, mode, SSBO, SSBO, options);
-        auto &opts = wisdom.find_optimal_options_or_default(Nx, Ny, radix, mode,
+        auto orig_opt = wisdom.find_optimal_options_or_default(Nx, Ny, radix, mode, SSBO, SSBO, options);
+        auto opts = wisdom.find_optimal_options_or_default(Nx, Ny, radix, mode,
                 first ? input_target : SSBO,
                 last ? output_target : SSBO,
                 { orig_opt, options.type });
@@ -682,7 +682,7 @@ FFT::FFT(Context *context, unsigned Nx, unsigned Ny,
             base_opts.type.input_fp16 = passes.empty() ? options.type.input_fp16 : options.type.fp16;
             base_opts.type.output_fp16 = last_pass ? options.type.output_fp16 : options.type.fp16;
 
-            auto &opts = wisdom.find_optimal_options_or_default(Nx, Ny, 2, mode, in_target, out_target, base_opts);
+            auto opts = wisdom.find_optimal_options_or_default(Nx, Ny, 2, mode, in_target, out_target, base_opts);
             auto res = build_resolve_radix(Nx, Ny, { opts.workgroup_size_x, opts.workgroup_size_y, 1 });
 
             const Parameters params = {
